@@ -13,7 +13,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
-use Swagger\Annotations as SWG;
 
 /**
  * User controller.
@@ -76,12 +75,29 @@ class UserController extends Controller
      */
     public function showAction(User $user)
     {
-        $data = $this->get('jms_serializer')->serialize($user, 'json');
 
-        $response = new Response($data);
-        $response->headers->set('Content-Type', 'application/json');
+        $user=$this->getDoctrine()->getRepository('AppBundle:User')->findOneBy([
+            'id' => $user->getId(),
+            'username' => $user->getUsername(),
+        ]);
 
-        return $response;
+        if (empty($user)){
+            $response=array(
+                'code'=>1,
+                'message'=>'User not found',
+                'error'=>null,
+                'result'=>null
+            );
+            return new JsonResponse($response, Response::HTTP_NOT_FOUND);
+        }
+        $data=$this->get('jms_serializer')->serialize($user,'json');
+        $response=array(
+            'code'=>0,
+            'message'=>'success',
+            'errors'=>null,
+            'result'=>json_decode($data)
+        );
+        return new JsonResponse($response,200);
     }
 
     /**
