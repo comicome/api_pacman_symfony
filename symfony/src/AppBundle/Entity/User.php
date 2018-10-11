@@ -113,22 +113,6 @@ class User extends BaseUser
     }
 
     /**
-     * @return string
-     */
-    public function getUsername()
-    {
-        return $this->username;
-    }
-
-    /**
-     * @param string $username
-     */
-    public function setUsername($username)
-    {
-        $this->username = $username;
-    }
-
-    /**
      * @return mixed
      */
     public function getId()
