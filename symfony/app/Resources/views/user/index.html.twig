@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% if app.user %}
+        <h1>Liste des utilisateurs</h1>
+        <table>
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Age</th>
+                <th>Famille</th>
+                <th>Couleur</th>
+                <th>Nourriture</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for user in users %}
+                <tr>
+                    <td><a href="{{ path('user_show', { 'id': user.id }) }}">{{ user.id }}</a></td>
+                    <td>{{ user.age }}</td>
+                    <td>{{ user.famille }}</td>
+                    <td>{{ user.couleur }}</td>
+                    <td>{{ user.nourriture }}</td>
+                    <td>
+                        <ul>
+                            <li>
+                                <a href="{{ path('user_show', { 'id': user.id }) }}">Voir le profil</a>
+                            </li>
+                            {% if user.id == app.user.id %}
+                            <li>
+                                <a href="{{ path('user_edit', { 'id': user.id }) }}">Editer le profil</a>
+                            </li>
+                            {% endif %}
+                                <li>
+                                    <a href="{{ path('remove_friend', { 'id': user.id}) }}">Supprimer de mes amis</a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('add_friend', { 'id': user.id }) }}">Ajouter en ami</a>
+                                </li>
+                        </ul>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p> Inscrivez-vous pour voir les utilisateurs</p>
+        <button type="button" class="btn btn-success">
+            <a href="{{ path('fos_user_registration_register') }}">Inscription</a></button>
+    {% endif %}
+{% endblock %}

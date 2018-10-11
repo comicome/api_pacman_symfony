@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% if app.user %}
+    <h1>User</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ user.id }}</td>
+            </tr>
+            <tr>
+                <th>Age</th>
+                <td>{{ user.age }}</td>
+            </tr>
+            <tr>
+                <th>Famille</th>
+                <td>{{ user.famille }}</td>
+            </tr>
+            <tr>
+                <th>Couleur</th>
+                <td>{{ user.couleur }}</td>
+            </tr>
+            <tr>
+                <th>Nourriture</th>
+                <td>{{ user.nourriture }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('user_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('user_edit', { 'id': user.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+    {% else %}
+        <p> Inscrivez-vous pour voir les utilisateurs</p>
+        <button type="button" class="btn btn-success">
+            <a href="{{ path('fos_user_registration_register') }}">Inscription</a></button>
+    {% endif %}
+{% endblock %}

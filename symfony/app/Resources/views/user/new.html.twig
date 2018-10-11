@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% if app.user %}
+    <h1>User creation</h1>
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <input type="submit" value="Create" />
+    {{ form_end(form) }}
+
+    <ul>
+        <li>
+            <a href="{{ path('user_index') }}">Back to the list</a>
+        </li>
+    </ul>
+{% else %}
+    <p> Inscrivez-vous pour voir les utilisateurs</p>
+    <button type="button" class="btn btn-success">
+        <a href="{{ path('fos_user_registration_register') }}">Inscription</a></button>
+    {% endif %}
+{% endblock %}
