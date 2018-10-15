@@ -18,7 +18,12 @@ user_edit:
     defaults: { _controller: "AppBundle:User:edit" }
     methods:  [GET, POST]
 
-user_delete:
-    path:     /{id}/delete
-    defaults: { _controller: "AppBundle:User:delete" }
-    methods:  DELETE
+friend_delete:
+    path:     /{id}/removeFriend
+    defaults: { _controller: "AppBundle:User:removeFriend" }
+    methods:  POST
+
+friend_add:
+    path:     /{id}/addFriend
+    defaults: { _controller: "AppBundle:User:addFriend" }
+    methods:  PATCH

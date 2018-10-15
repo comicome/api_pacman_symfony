@@ -10,3 +10,4 @@ parameters:
     mailer_user: null
     mailer_password: null
     secret: dd
+    jwt_key_pass_phrase: ~

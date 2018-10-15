@@ -11,9 +11,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Nelmio\ApiDocBundle\Annotation\Model;
-use Nelmio\ApiDocBundle\Annotation\Security;
-use Swagger\Annotations as SWG;
 
 /**
  * User controller.
@@ -36,14 +33,79 @@ class UserController extends Controller
             return new JsonResponse($response, Response::HTTP_NOT_FOUND);
         }
         $data=$this->get('jms_serializer')->serialize($users,'json');
-        $response=array(
-            'code'=>0,
-            'message'=>'success',
-            'errors'=>null,
-            'result'=>json_decode($data)
-        );
+        $response=json_decode($data);
         return new JsonResponse($response,200);
 
+    }
+
+    /**
+     * Finds and displays a user entity.
+     *
+     */
+    public function showAction(User $user)
+    {
+        $data = $this->get('jms_serializer')->serialize($user, 'json');
+
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+
+        return $response;
+    }
+
+
+
+    public function addFriendAction(Request $request, User $myFriends, ObjectManager $manager)
+    {
+        $user = $this->getUser();
+        $user->addMyFriend($myFriends);
+        $manager->persist($myFriends);
+        $manager->flush();
+
+        return header("HTTP/1.1 200 OK");
+    }
+
+
+    public function removeFriendAction(Request $request, User $myFriends, ObjectManager $manager)
+    {
+        $user = $this->getUser();
+        $user->removeMyFriend($myFriends);
+        $manager->flush();
+
+        return header("HTTP/1.1 200 OK");
+    }
+
+
+
+    public function patchUserAction(Request $request)
+    {
+        return $this->updateUser($request, false);
+    }
+
+
+
+    private function updateUser(Request $request, $clearMissing)
+    {
+        $user = $this->get('doctrine.orm.entity_manager')
+            ->getRepository('AppBundle:User')
+            ->find($request->get('id'));
+        /* @var $user User */
+
+        if (empty($user)) {
+            return new JsonResponse(['message' => 'Utilisateur non trouvé'], Response::HTTP_NOT_FOUND);
+        }
+
+        $form = $this->createForm(User::class, $user);
+
+        $form->submit($request->request->all(), $clearMissing);
+
+        if ($form->isValid()) {
+            $em = $this->get('doctrine.orm.entity_manager');
+            $em->persist($user);
+            $em->flush();
+            return $user;
+        } else {
+            return $form;
+        }
     }
 
     /**
@@ -71,20 +133,6 @@ class UserController extends Controller
     }
 
     /**
-     * Finds and displays a user entity.
-     *
-     */
-    public function showAction(User $user)
-    {
-        $data = $this->get('jms_serializer')->serialize($user, 'json');
-
-        $response = new Response($data);
-        $response->headers->set('Content-Type', 'application/json');
-
-        return $response;
-    }
-
-    /**
      * Displays a form to edit an existing user entity.
      *
      */
@@ -106,6 +154,7 @@ class UserController extends Controller
             'delete_form' => $deleteForm->createView(),
         ));
     }
+
 
     /**
      * Deletes a user entity.
@@ -139,42 +188,6 @@ class UserController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
-    }
-
-    /**
-     * @Route("/addFriend/{id}", name="add_friend")
-     * @param Request $request
-     * @param User $user
-     * @param ObjectManager $manager
-     * @return int|string
-     */
-    public function addFriendAction(Request $request, User $myFriends, ObjectManager $manager)
-    {
-
-        $user = $this->getUser();
-        $user->addMyFriend($myFriends);
-        $manager->persist($myFriends);
-        $manager->flush();
-
-
-        return $this->redirectToRoute('user_index');
-    }
-
-    /**
-     * @Route("/deleteFriend/{id}", name="remove_friend")
-     * @param Request $request
-     * @param User $user
-     * @param ObjectManager $manager
-     * @return int|string
-     */
-    public function removeFriendAction(Request $request, User $myFriends, ObjectManager $manager)
-    {
-
-        $user = $this->getUser();
-        $user->removeMyFriend($myFriends);
-        $manager->flush();
-
-        return $this->redirectToRoute('user_index');
     }
 
 }
