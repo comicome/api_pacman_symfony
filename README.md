@@ -3,12 +3,14 @@
 
 1 - Git clone the repo https://github.com/comicome/api_pacman_symfony
 
-2 - Open terminal 
+2 - Create a database call pacman and import the file data.sql
 
-3 - cd to the location of the project
+3 - Open terminal 
 
-4 - cd symfony
+4 - cd to the location of the project
 
-5 - Install the depencies with composer install
+5 - cd symfony
 
-6 - php bin/console server:run
+6 - Install the depencies with composer install
+
+7 - php bin/console server:run
