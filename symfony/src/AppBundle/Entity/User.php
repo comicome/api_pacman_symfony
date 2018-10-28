@@ -148,7 +148,6 @@ class User extends BaseUser
     public function addFriendsWithMe(User $friendsWithMe)
     {
         $this->friendsWithMe[] = $friendsWithMe;
-
         return $this;
     }
 
@@ -173,15 +172,11 @@ class User extends BaseUser
     public function addMyFriend(User $myFriend)
     {
         $this->myFriends[] = $myFriend;
-
         return $this;
     }
 
     public function removeMyFriend(User $myFriend)
     {
-        if (!$this->myFriends->contains($myFriend)) {
-            return;
-        }
         $this->myFriends->removeElement($myFriend);
     }
 

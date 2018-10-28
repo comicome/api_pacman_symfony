@@ -19,11 +19,21 @@ user_edit:
     methods:  [GET, POST]
 
 friend_delete:
-    path:     /{id}/removeFriend
+    path:     removeFriend/{id}
     defaults: { _controller: "AppBundle:User:removeFriend" }
     methods:  POST
 
 friend_add:
-    path:     /{id}/addFriend
+    path:     addFriend/{friendId}
     defaults: { _controller: "AppBundle:User:addFriend" }
+    methods:  PATCH
+
+edit_all_profile:
+    path:     edit/profil/{id}
+    defaults: { _controller: "AppBundle:User:updateUser" }
+    methods:  PUT
+
+edit_partial_profile:
+    path:     edit/profil/{id}
+    defaults: { _controller: "AppBundle:User:patchUser" }
     methods:  PATCH

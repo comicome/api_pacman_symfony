@@ -24,9 +24,6 @@ class RegistrationType extends AbstractType
         return 'app_user_registration';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
