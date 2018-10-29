@@ -53,8 +53,6 @@ Open your WAMP/MAMP/LAMP and start server
 In the project, open the ```app/config/parameters.yml``` file and configure the Database
 
 ```
-# .env
-
 parameters:
     database_host: 127.0.0.1
     database_port: 7779
@@ -92,7 +90,6 @@ In the terminal, start the server.
 
 ```
 $ php bin/console server:run
-
 ```
 
 ### Load the API 🎉🍻
